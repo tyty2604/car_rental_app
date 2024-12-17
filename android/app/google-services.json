@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "562134379208",
+    "project_id": "doanchuyennganh-65edf",
+    "storage_bucket": "doanchuyennganh-65edf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562134379208:android:fe9b5bfc33a1d5ea4f93fd",
+        "android_client_info": {
+          "package_name": "com.example.car_rental_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "562134379208-itqhc3cbrcpm9l3jeci2gcrbcnmm8v5j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrEejAmvE_v5aX4a5NdKWU9W7NTh8r5Qc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "562134379208-itqhc3cbrcpm9l3jeci2gcrbcnmm8v5j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
