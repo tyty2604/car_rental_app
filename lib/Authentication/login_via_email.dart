@@ -110,7 +110,7 @@ class _LoginViaEmailState extends State<LoginViaEmail> {
             ),
             const Text('Đăng Nhập Tài Khoản Của Bạn',
                 style: TextStyle(
-                    fontSize: 23,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 3, 163, 67))),
             SizedBox(

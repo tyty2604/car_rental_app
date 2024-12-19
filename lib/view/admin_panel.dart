@@ -96,7 +96,7 @@ class _AdminPanelState extends State<AdminPanel> {
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
               child: CustomBtn(
-                color: Colors.blueGrey.shade200,
+                color:  Colors.white70,
                 icon: const Icon(
                   Icons.car_repair,
                   size: 40,

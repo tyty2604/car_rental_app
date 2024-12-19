@@ -257,7 +257,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                           context: context,
                           builder: (BuildContext dialogContext) {
                             return AlertDialog(
-                              title: const Text('Booking Details'),
+                              title: const Text('Hoàn Thành Đặt Xe'),
                               content: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 mainAxisSize: MainAxisSize.min,
