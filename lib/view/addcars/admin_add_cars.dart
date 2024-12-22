@@ -3,7 +3,7 @@
 import 'package:car_rental_app/Component/list.dart';
 import 'package:car_rental_app/Component/validate_btn.dart';
 import 'package:car_rental_app/Toast/CustomToast.dart';
-import 'package:car_rental_app/view/home_page.dart';
+import 'package:car_rental_app/view/admin_panel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -13,14 +13,14 @@ import 'dart:io';
 import '../../Component/customdrop_down.dart';
 import '../../Toast/customsnackbar.dart';
 
-class AddCars extends StatefulWidget {
-  const AddCars({super.key});
+class AdminAddCars extends StatefulWidget {
+  const AdminAddCars({super.key});
 
   @override
-  State<AddCars> createState() => _AddCarsState();
+  State<AdminAddCars> createState() => _AdminAddCarsState();
 }
 
-class _AddCarsState extends State<AddCars> {
+class _AdminAddCarsState extends State<AdminAddCars> {
   final categorycontroller = TextEditingController();
   final makecontroller = TextEditingController();
   final modelcontroller = TextEditingController();
@@ -55,9 +55,28 @@ class _AddCarsState extends State<AddCars> {
 @override
   void initState() {
     super.initState();
-    loadUserData();
+    loadAdminData();
   }
+  String? adminName;
 
+void loadAdminData() async {
+  final auth = FirebaseAuth.instance;
+  final adminCollection = FirebaseFirestore.instance.collection("admin");
+
+  try {
+    final snapshot = await adminCollection.where("uid", isEqualTo: auth.currentUser!.uid).get();
+    if (snapshot.docs.isNotEmpty) {
+      final data = snapshot.docs.first.data();
+      setState(() {
+        adminName = data['adminname'] ?? 'Quản Trị Viên';
+      });
+    } else {
+      CustomToast().Toastt("Thêm Xe Với Tư Cách Quản Trị Viên.");
+    }
+  } catch (e) {
+    CustomToast().Toastt("Lỗi tải thông tin admin: $e");
+  }
+}
   void loadUserData() async {
     final auth = FirebaseAuth.instance;
     final firestore = FirebaseFirestore.instance.collection("users");
@@ -422,7 +441,7 @@ class _AddCarsState extends State<AddCars> {
                     validate();
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
+                      MaterialPageRoute(builder: (context) => const AdminPanel()),
                       (Route<dynamic> route) => false,
                   );
                 },
@@ -434,67 +453,64 @@ class _AddCarsState extends State<AddCars> {
     );
   }
 
-  void validate() async {
-
-  final user = FirebaseAuth.instance.currentUser;
-
-
-    if (categorycontroller.text.isEmpty &&
-        makecontroller.text.isEmpty &&
-        modelcontroller.text.isEmpty &&
-        modelyearcontroller.text.isEmpty &&
-        pricecontroller.text.isEmpty &&
-        selectOptionfuel == 'Select Option' &&
-        selectOptiontrans == 'Select Option' &&
-        _image == null) {
-      CustomSnackbar().snackbar('Vui lòng nhập dữ liệu', context);
-    } else if (_image == null) {
-      CustomSnackbar().snackbar('Vui lòng chọn một hình ảnh ', context);
-    } else if (categorycontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn danh mục', context);
-    } else if (makecontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn hãng xe', context);
-    } else if (modelcontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn mẫu xe', context);
-    } else if (modelyearcontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn năm mẫu xe của xe', context);
-    } else if (pricecontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn giá ', context);
-    } else if (selectOptionfuel == 'Select Option') {
-      CustomSnackbar().snackbar('Vui lòng chọn loại nhiên liệu', context);
-    } else if (selectOptiontrans == 'Select Option') {
-      CustomSnackbar()
-          .snackbar('Hãy chọn loại xe số sàn hay tự động ', context);
-    } else {
-      if (user == null) {
-        CustomSnackbar().snackbar('Không tìm thấy người dùng', context);
-        return;
-      }
-
-      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-          .ref('/carsimages/' +
-              'Images' +
-              DateTime.now().millisecondsSinceEpoch.toString());
-      firebase_storage.UploadTask uploadTask = ref.putFile(_image!.absolute);
-      Future.value(uploadTask).then((value) async {
-        var newurl = await ref.getDownloadURL();
-        String id = DateTime.now().microsecondsSinceEpoch.toString();
-        firestore.doc(id).set({
-          'id': id,
-          'image': newurl.toString(),
-          'category': categorycontroller.text,
-          'make': makecontroller.text,
-          'model': modelcontroller.text,
-          'modelyear': modelyearcontroller.text,
-          'price': pricecontroller.text.toString(),
-          'fuel': selectOptionfuel,
-          'transmission': selectOptiontrans,
-          'addedBy': usercontroller.text,
-        });
-        CustomSnackbar().snackbar('Đã thêm xe thành công', context);
-      }).onError((error, stackTrace) {
-        CustomSnackbar().snackbar(error.toString(), context);
-      });
+void validate() async {
+  if (categorycontroller.text.isEmpty &&
+      makecontroller.text.isEmpty &&
+      modelcontroller.text.isEmpty &&
+      modelyearcontroller.text.isEmpty &&
+      pricecontroller.text.isEmpty &&
+      selectOptionfuel == 'Select Option' &&
+      selectOptiontrans == 'Select Option' &&
+      _image == null) {
+    CustomSnackbar().snackbar('Vui lòng nhập dữ liệu', context);
+  } else if (_image == null) {
+    CustomSnackbar().snackbar('Vui lòng chọn một hình ảnh ', context);
+  } else if (categorycontroller.text.isEmpty) {
+    CustomSnackbar().snackbar('Vui lòng chọn danh mục', context);
+  } else if (makecontroller.text.isEmpty) {
+    CustomSnackbar().snackbar('Vui lòng chọn hãng xe', context);
+  } else if (modelcontroller.text.isEmpty) {
+    CustomSnackbar().snackbar('Vui lòng chọn mẫu xe', context);
+  } else if (modelyearcontroller.text.isEmpty) {
+    CustomSnackbar().snackbar('Vui lòng chọn năm mẫu xe của xe', context);
+  } else if (pricecontroller.text.isEmpty) {
+    CustomSnackbar().snackbar('Vui lòng chọn giá ', context);
+  } else if (selectOptionfuel == 'Select Option') {
+    CustomSnackbar().snackbar('Vui lòng chọn loại nhiên liệu', context);
+  } else if (selectOptiontrans == 'Select Option') {
+    CustomSnackbar()
+        .snackbar('Hãy chọn loại xe số sàn hay tự động ', context);
+  } else {
+    if (FirebaseAuth.instance.currentUser == null) {
+      CustomSnackbar().snackbar('Không tìm thấy người dùng', context);
+      return;
     }
+
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref('/carsimages/' +
+            'Images' +
+            DateTime.now().millisecondsSinceEpoch.toString());
+    firebase_storage.UploadTask uploadTask = ref.putFile(_image!.absolute);
+    Future.value(uploadTask).then((value) async {
+      var newurl = await ref.getDownloadURL();
+      String id = DateTime.now().microsecondsSinceEpoch.toString();
+      firestore.doc(id).set({
+        'id': id,
+        'image': newurl.toString(),
+        'category': categorycontroller.text,
+        'make': makecontroller.text,
+        'model': modelcontroller.text,
+        'modelyear': modelyearcontroller.text,
+        'price': pricecontroller.text.toString(),
+        'fuel': selectOptionfuel,
+        'transmission': selectOptiontrans,
+        'addedBy': adminName ?? 'Quản Trị Viên',
+      });
+      CustomSnackbar().snackbar('Đã thêm xe thành công', context);
+    }).onError((error, stackTrace) {
+      CustomSnackbar().snackbar(error.toString(), context);
+    });
   }
+}
+
 }

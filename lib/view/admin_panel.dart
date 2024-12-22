@@ -1,9 +1,10 @@
 import 'package:car_rental_app/Component/custom_btn.dart';
 import 'package:car_rental_app/view/BookedCars/alluserbookedcars.dart';
+import 'package:car_rental_app/view/addcars/admin_add_cars.dart';
+import 'package:car_rental_app/view/adminaddedlist.dart';
 import 'package:car_rental_app/view/home_page.dart';
 import 'package:car_rental_app/view/adminCarlist/car_list_admin.dart';
 import 'package:flutter/material.dart';
-import 'addcars/add_cars.dart';
 
 class AdminPanel extends StatefulWidget {
   const AdminPanel({super.key});
@@ -80,19 +81,39 @@ class _AdminPanelState extends State<AdminPanel> {
               child: CustomBtn(
                 color: Colors.white70,
                 icon: const Icon(
-                  Icons.car_crash_outlined,
+                  Icons.add_circle_outline,
                   size: 40,
                 ),
-                title: 'Thêm Ô Tô',
+                title: 'Thêm Xe',
                 ontap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AddCars(),
+                        builder: (context) => const AdminAddCars(),
                       ));
                 },
               ),
             ),
+            Padding(
+  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+  child: CustomBtn(
+    color: Colors.white70,
+    icon: const Icon(
+      Icons.car_crash_outlined,
+      size: 40,
+    ),
+    title: 'Xe Của Quản Trị Viên',
+    ontap: () {
+      // Định nghĩa hành động của nút
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AdminAddedList(), 
+        ),
+      );
+    },
+  ),
+),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
               child: CustomBtn(
@@ -101,7 +122,7 @@ class _AdminPanelState extends State<AdminPanel> {
                   Icons.car_repair,
                   size: 40,
                 ),
-                title: 'Danh Sách Ô Tô',
+                title: 'Danh Sách Xe Ô Tô',
                 ontap: () {
                   Navigator.push(
                     context,

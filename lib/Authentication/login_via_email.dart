@@ -108,9 +108,9 @@ class _LoginViaEmailState extends State<LoginViaEmail> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            const Text('Đăng Nhập Tài Khoản Của Bạn',
+            const Text('Đăng Nhập Tài Khoản',
                 style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 3, 163, 67))),
             SizedBox(
