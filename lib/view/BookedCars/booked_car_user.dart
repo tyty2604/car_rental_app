@@ -83,7 +83,7 @@ class _BookedCarUserState extends State<BookedCarUser> {
                             image:
                                 snapshot.data!.docs[index]['image'].toString(),
                             text:
-                                'Tổng : $formattedPrice đ/Ngày',
+                                'Tổng : $formattedPrice đ',
                             title: '${snapshot.data!.docs[index]['carname'].toString()} ${snapshot.data!.docs[index]['model'].toString()}',  
                             subtitle:
                                 snapshot.data!.docs[index]['booked by'],

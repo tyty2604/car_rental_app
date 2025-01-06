@@ -69,7 +69,7 @@ class _UserDetailState extends State<UserDetail> {
             child: Text(
               'Chi Tiết Người Dùng',
               style: TextStyle(
-                fontSize: 26,
+                fontSize: 30,
                 color:  Color.fromARGB(255, 3, 163, 67),
                 fontWeight: FontWeight.bold,
               ),
@@ -97,10 +97,10 @@ class _UserDetailState extends State<UserDetail> {
                           children: [
                             Card(
                               elevation: 10,
-                              color: Colors.blueGrey.shade200,
+                              color: Colors.blueGrey.shade100,
                               child: CustomListtile(
                                 icon: const Icon(Icons.person,
-                                    color: Color(0xff282F66)),
+                                    color:Color.fromARGB(255, 67, 207, 81)),
                                 title: snapshot.data!.docs[index]['username']
                                     .toString(),
                               ),
@@ -110,10 +110,10 @@ class _UserDetailState extends State<UserDetail> {
                             ),
                             Card(
                               elevation: 10,
-                              color: Colors.blueGrey.shade200,
+                              color: Colors.blueGrey.shade100,
                               child: CustomListtile(
                                 icon: const Icon(Icons.email,
-                                    color: Color(0xff282F66)),
+                                    color: Color.fromARGB(255, 67, 207, 81)),
                                 title: snapshot.data!.docs[index]['email']
                                     .toString(),
                               ),
@@ -123,10 +123,10 @@ class _UserDetailState extends State<UserDetail> {
                             ),
                             Card(
                               elevation: 10,
-                              color: Colors.blueGrey.shade200,
+                              color: Colors.blueGrey.shade100,
                               child: CustomListtile(
                                 icon: const Icon(Icons.phone,
-                                    color: Color(0xff282F66)),
+                                    color:Color.fromARGB(255, 67, 207, 81)),
                                 title: snapshot.data!.docs[index]['phoneno']
                                     .toString(),
                               ),
@@ -136,11 +136,11 @@ class _UserDetailState extends State<UserDetail> {
                             ),
                             Card(
                               elevation: 10,
-                              color: Colors.blueGrey.shade200,
+                              color: Colors.blueGrey.shade100,
                               child: CustomListtile(
                                 icon: const Icon(
                                   Icons.location_history,
-                                  color: Color(0xff282F66),
+                                  color: Color.fromARGB(255, 67, 207, 81),
                                 ),
                                 title: snapshot.data!.docs[index]['address']
                                     .toString(),

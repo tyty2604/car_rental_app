@@ -435,66 +435,64 @@ class _AddCarsState extends State<AddCars> {
   }
 
   void validate() async {
-
   final user = FirebaseAuth.instance.currentUser;
 
-
-    if (categorycontroller.text.isEmpty &&
-        makecontroller.text.isEmpty &&
-        modelcontroller.text.isEmpty &&
-        modelyearcontroller.text.isEmpty &&
-        pricecontroller.text.isEmpty &&
-        selectOptionfuel == 'Select Option' &&
-        selectOptiontrans == 'Select Option' &&
-        _image == null) {
+  if (categorycontroller.text.isEmpty &&
+      makecontroller.text.isEmpty &&
+      modelcontroller.text.isEmpty &&
+      modelyearcontroller.text.isEmpty &&
+      pricecontroller.text.isEmpty &&
+      selectOptionfuel == 'Select Option' &&
+      selectOptiontrans == 'Select Option' &&
+      _image == null) {
+    if (mounted) {
       CustomSnackbar().snackbar('Vui lòng nhập dữ liệu', context);
-    } else if (_image == null) {
+    }
+  } else if (_image == null) {
+    if (mounted) {
       CustomSnackbar().snackbar('Vui lòng chọn một hình ảnh ', context);
-    } else if (categorycontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn danh mục', context);
-    } else if (makecontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn hãng xe', context);
-    } else if (modelcontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn mẫu xe', context);
-    } else if (modelyearcontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn năm mẫu xe của xe', context);
-    } else if (pricecontroller.text.isEmpty) {
-      CustomSnackbar().snackbar('Vui lòng chọn giá ', context);
-    } else if (selectOptionfuel == 'Select Option') {
-      CustomSnackbar().snackbar('Vui lòng chọn loại nhiên liệu', context);
-    } else if (selectOptiontrans == 'Select Option') {
-      CustomSnackbar()
-          .snackbar('Hãy chọn loại xe số sàn hay tự động ', context);
-    } else {
-      if (user == null) {
+    }
+  } else {
+    if (user == null) {
+      if (mounted) {
         CustomSnackbar().snackbar('Không tìm thấy người dùng', context);
-        return;
       }
+      return;
+    }
 
+    try {
       firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
           .ref('/carsimages/' +
               'Images' +
               DateTime.now().millisecondsSinceEpoch.toString());
       firebase_storage.UploadTask uploadTask = ref.putFile(_image!.absolute);
-      Future.value(uploadTask).then((value) async {
-        var newurl = await ref.getDownloadURL();
-        String id = DateTime.now().microsecondsSinceEpoch.toString();
-        firestore.doc(id).set({
-          'id': id,
-          'image': newurl.toString(),
-          'category': categorycontroller.text,
-          'make': makecontroller.text,
-          'model': modelcontroller.text,
-          'modelyear': modelyearcontroller.text,
-          'price': pricecontroller.text.toString(),
-          'fuel': selectOptionfuel,
-          'transmission': selectOptiontrans,
-          'addedBy': usercontroller.text,
-        });
-        CustomSnackbar().snackbar('Đã thêm xe thành công', context);
-      }).onError((error, stackTrace) {
-        CustomSnackbar().snackbar(error.toString(), context);
+      await uploadTask;
+
+      var newurl = await ref.getDownloadURL();
+      String id = DateTime.now().microsecondsSinceEpoch.toString();
+      await firestore.doc(id).set({
+        'id': id,
+        'image': newurl.toString(),
+        'category': categorycontroller.text,
+        'make': makecontroller.text,
+        'model': modelcontroller.text,
+        'modelyear': modelyearcontroller.text,
+        'price': pricecontroller.text.toString(),
+        'fuel': selectOptionfuel,
+        'transmission': selectOptiontrans,
+        'addedBy': usercontroller.text,
       });
+
+      if (mounted) {
+        CustomSnackbar().snackbar('Đã thêm xe thành công', context);
+      }
+    } catch (e) {
+      if (mounted) {
+        CustomSnackbar().snackbar("Lỗi: $e", context);
+      }
     }
   }
+}
+
+
 }

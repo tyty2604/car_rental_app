@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                  CustomListtile(
                   icon: const Icon(Icons.car_crash_outlined),
-                  title: 'Xe Đã Cho Thuê',
+                  title: 'Xe Đã Được Đặt',
                   ontap: () {
                   Navigator.push(
                     context,
