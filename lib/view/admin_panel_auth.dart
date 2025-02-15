@@ -24,24 +24,33 @@ class _AdminPanelAuthState extends State<AdminPanelAuth> {
   final auth = FirebaseAuth.instance;
 
   void isLogin() {
-    FirebaseFirestore.instance
-        .collection('admin')
-        .doc('adminlogin')
-        .snapshots()
-        .forEach((element) {
-      if (element.data()!['adminemail'] == emailcontroller.text &&
-          element.data()!['adminpassword'] == passwordcontroller.text) {
+  FirebaseFirestore.instance
+      .collection('admin')
+      .doc('adminlogin')
+      .get() // Sử dụng get() thay vì snapshots() vì bạn chỉ cần lấy dữ liệu một lần
+      .then((document) {
+    if (document.exists) {
+      final data = document.data();
+      if (data != null &&
+          data['adminemail'] == emailcontroller.text &&
+          data['adminpassword'] == passwordcontroller.text) {
         Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AdminPanel(),
-            ),
-            (route) => false);
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AdminPanel(),
+          ),
+          (route) => false,
+        );
       } else {
-        CustomToast().Toastt('Incorrect email or password');
+        CustomToast().Toastt('Email hoặc mật khẩu không chính xác');
       }
-    });
-  }
+    } else {
+      CustomToast().Toastt('Tài khoản admin không tồn tại');
+    }
+  }).catchError((error) {
+    CustomToast().Toastt('Đã xảy ra lỗi: $error');
+  });
+}
 
   @override
   Widget build(BuildContext context) {

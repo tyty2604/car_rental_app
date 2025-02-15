@@ -462,27 +462,47 @@ void validate() async {
       selectOptionfuel == 'Select Option' &&
       selectOptiontrans == 'Select Option' &&
       _image == null) {
-    CustomSnackbar().snackbar('Vui lòng nhập dữ liệu', context);
+    if (mounted) {
+      CustomSnackbar().snackbar('Vui lòng nhập dữ liệu', context);
+    }
   } else if (_image == null) {
-    CustomSnackbar().snackbar('Vui lòng chọn một hình ảnh ', context);
+    if (mounted) {
+      CustomSnackbar().snackbar('Vui lòng chọn một hình ảnh ', context);
+    }
   } else if (categorycontroller.text.isEmpty) {
-    CustomSnackbar().snackbar('Vui lòng chọn danh mục', context);
+    if (mounted) {
+      CustomSnackbar().snackbar('Vui lòng chọn danh mục', context);
+    }
   } else if (makecontroller.text.isEmpty) {
-    CustomSnackbar().snackbar('Vui lòng chọn hãng xe', context);
+    if (mounted) {
+      CustomSnackbar().snackbar('Vui lòng chọn hãng xe', context);
+    }
   } else if (modelcontroller.text.isEmpty) {
-    CustomSnackbar().snackbar('Vui lòng chọn mẫu xe', context);
+    if (mounted) {
+      CustomSnackbar().snackbar('Vui lòng chọn mẫu xe', context);
+    }
   } else if (modelyearcontroller.text.isEmpty) {
-    CustomSnackbar().snackbar('Vui lòng chọn năm mẫu xe của xe', context);
+    if (mounted) {
+      CustomSnackbar().snackbar('Vui lòng chọn năm mẫu xe của xe', context);
+    }
   } else if (pricecontroller.text.isEmpty) {
-    CustomSnackbar().snackbar('Vui lòng chọn giá ', context);
+    if (mounted) {
+      CustomSnackbar().snackbar('Vui lòng chọn giá ', context);
+    }
   } else if (selectOptionfuel == 'Select Option') {
-    CustomSnackbar().snackbar('Vui lòng chọn loại nhiên liệu', context);
+    if (mounted) {
+      CustomSnackbar().snackbar('Vui lòng chọn loại nhiên liệu', context);
+    }
   } else if (selectOptiontrans == 'Select Option') {
-    CustomSnackbar()
-        .snackbar('Hãy chọn loại xe số sàn hay tự động ', context);
+    if (mounted) {
+      CustomSnackbar()
+          .snackbar('Hãy chọn loại xe số sàn hay tự động ', context);
+    }
   } else {
     if (FirebaseAuth.instance.currentUser == null) {
-      CustomSnackbar().snackbar('Không tìm thấy người dùng', context);
+      if (mounted) {
+        CustomSnackbar().snackbar('Không tìm thấy người dùng', context);
+      }
       return;
     }
 
@@ -490,11 +510,14 @@ void validate() async {
         .ref('/carsimages/' +
             'Images' +
             DateTime.now().millisecondsSinceEpoch.toString());
-    firebase_storage.UploadTask uploadTask = ref.putFile(_image!.absolute);
-    Future.value(uploadTask).then((value) async {
+    firebase_storage.UploadTask uploadTask = ref.putFile(_image!);
+
+    try {
+      var uploadTaskSnapshot = await uploadTask;
       var newurl = await ref.getDownloadURL();
       String id = DateTime.now().microsecondsSinceEpoch.toString();
-      firestore.doc(id).set({
+
+      await firestore.doc(id).set({
         'id': id,
         'image': newurl.toString(),
         'category': categorycontroller.text,
@@ -506,11 +529,17 @@ void validate() async {
         'transmission': selectOptiontrans,
         'addedBy': adminName ?? 'Quản Trị Viên',
       });
-      CustomSnackbar().snackbar('Đã thêm xe thành công', context);
-    }).onError((error, stackTrace) {
-      CustomSnackbar().snackbar(error.toString(), context);
-    });
+
+      if (mounted) {
+        CustomSnackbar().snackbar('Đã thêm xe thành công', context);
+      }
+    } catch (error) {
+      if (mounted) {
+        CustomSnackbar().snackbar(error.toString(), context);
+      }
+    }
   }
 }
+
 
 }
